@@ -27,7 +27,6 @@ def process_item(item, conn):
         expiry_date = (today + timedelta(days=5)).strftime("%Y-%m-%d")
 
     elif item.lower().startswith("pack"):
-        food_prefix=item[:4]
                 # Dummy barcode scan (replace with actual implementation)
         barcode_data = scan_barcode(dummy=True)
         # Example dummy barcode data format: "name,weight,expiry"
