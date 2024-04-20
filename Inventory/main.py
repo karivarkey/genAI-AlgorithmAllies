@@ -25,9 +25,9 @@ def process_item(item, database2):
     database2.write_item(name=vegetable_name, weight=weight, expiry_date=expiry_date.strftime("%Y-%m-%d"))
 
     print(f"Detected vegetable: {vegetable_name}. Weight: {weight} kg. Expiry: {expiry_date} (written to database2)")
-  elif item.lower().startswith("pac_"):
+  elif item.lower().startswith("pack"):
     # Extract packaged food name prefix from the format
-    food_prefix = item[:4]
+    #food_prefix = item[:4]
 
     # Dummy barcode scan (replace with actual implementation)
     barcode_data = scan_barcode(dummy=True)
