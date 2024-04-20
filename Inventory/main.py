@@ -21,6 +21,7 @@ def process_item(item, conn):
 
         # Simulate weight sensor reading (replace with actual sensor code)
         weight = round(np.random.uniform(0.1, 1.5), 2)  # Random weight between 0.1 and 1.5 kg
+<<<<<<< HEAD
         # Add 5 days to current date for expiry
         today = date.today()
         expiry_date = (today + timedelta(days=5)).strftime("%Y-%m-%d")
@@ -37,6 +38,15 @@ def process_item(item, conn):
         food_prefix = name
 
         # Dummy barcode scan (replace with actual implementation)
+=======
+
+        # Add 5 days to current date for expiry
+        today = date.today()
+        expiry_date = (today + timedelta(days=5)).strftime("%Y-%m-%d")
+
+    elif item.lower().startswith("pack"):
+                # Dummy barcode scan (replace with actual implementation)
+>>>>>>> 44530acd4deceb58b13db6ba18768dbf5502504d
         barcode_data = scan_barcode(dummy=True)
         # Example dummy barcode data format: "name,weight,expiry"
         if barcode_data:
