@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Available Dishes</title>
+  </head>
+  <body>
+    <h1>Available Dishes Based on Your Ingredients</h1>
+    <ul>
+      {% for dish in dishes %}
+      <li>
+        <h2>{{ dish.name }}</h2>
+        <p><b>Ingredients:</b></p>
+        <ul>
+          {% for ingredient in dish.ingredients %}
+          <li>{{ ingredient }}</li>
+          {% endfor %}
+        </ul>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>
