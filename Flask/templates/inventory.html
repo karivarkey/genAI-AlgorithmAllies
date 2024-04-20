@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>INVENTORY</title>
+    <link rel="stylesheet" href="./../static/css/output.css" />
+    <script
+      src="https://kit.fontawesome.com/7f7b54ca0a.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <header
+      class="font-poppins text-3xl text-white bg-blue-600 text-center p-2 flex items-center"
+    >
+      <a href="./">
+        <i class="fa-solid fa-house-chimney"></i>
+      </a>
+      <h class="text-center flex-grow">Your Smort Fridge</h>
+    </header>
+    <div class="inventory-list flex flex-wrap justify-start mt-6">
+      {% for item in materials %}
+      <div
+        class="card bg-white rounded-md shadow-md p-4 mb-4 w-1/3 hover:scale-105"
+      >
+        <div class="text-xl font-medium">{{ item.Name }}</div>
+        <div class="text-l text-gray-500">quantity: {{ item.Quantity }}</div>
+        {% if item.get('ExpiryDate') %}
+        <div class="text-m text-gray-500">Expires: {{ item.ExpiryDate }}</div>
+        {% else %}
+        <div class="text-m text-gray-500">Expires: -</div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    <div>
+      <button
+        class="hover:scale-x-105 hover:scale-y-105 absolute right-5 bottom-10 p-4 bg-blue-500 text-white rounded-md shadow-md"
+        onClick="{Clicked}"
+      >
+        Get Recipie!
+      </button>
+    </div>
+  </body>
+</html>
