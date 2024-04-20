@@ -1,114 +1,136 @@
-# import cv2  # Optional, for future barcode scanning implementation (if needed)
+#import cv2  # Optional, for future barcode scanning implementation (if needed)
 import numpy as np
+import sqlite3  # For database interaction
+from datetime import date, timedelta  # For expiry date handling
 
-def process_item(item, database2):
-  """
-  Processes an item based on its category (vegetable, packaged food, or other) and writes details to database2.
 
-  Args:
-      item (str): The name of the item (can be empty).
-      database2 (object): A reference to your database connection or object to store item details.
-  """
+def process_item(item, conn):
+    """
+    Processes an item based on its category and writes details to the database.
 
-  if item.lower().startswith("veg_"):
-    # Extract vegetable name from the format
-    vegetable_name = item[4:]
+    Args:
+        item (str): The name of the item (can be empty).
+        conn (sqlite3.Connection): A connection object to the database.
+    """
 
-    # Simulate weight sensor reading (replace with actual sensor code)
-    weight = round(np.random.uniform(0.1, 1.5), 2)  # Random weight between 0.1 and 1.5 kg
+    cursor = conn.cursor()
 
-    # Add 5 days to current date for expiry
-    today = datetime.date.today()
-    expiry_date = today + datetime.timedelta(days=5)
+    if item.lower().startswith("veg_"):
+        # Extract vegetable name from the format
+        vegetable_name = item[4:]
 
-    # Write data to database2
-    database2.write_item(name=vegetable_name, weight=weight, expiry_date=expiry_date.strftime("%Y-%m-%d"))
+        # Simulate weight sensor reading (replace with actual sensor code)
+        weight = round(np.random.uniform(0.1, 1.5), 2)  # Random weight between 0.1 and 1.5 kg
 
+<<<<<<< HEAD
     print(f"Detected vegetable: {vegetable_name}. Weight: {weight} kg. Expiry: {expiry_date} (written to database2)")
-  elif item.lower().startswith("pac_"):
+  elif item.lower().startswith("pack"):
     # Extract packaged food name prefix from the format
-    food_prefix = item[:4]
+    #food_prefix = item[:4]
+=======
+        # Add 5 days to current date for expiry
+        today = date.today()
+        expiry_date = (today + timedelta(days=5)).strftime("%Y-%m-%d")
+>>>>>>> 7f820e9fb64d5a947c71358ac4305a77f59ef070
 
-    # Dummy barcode scan (replace with actual implementation)
-    barcode_data = scan_barcode(dummy=True)
-    # Example dummy barcode data format: "name,weight,expiry"
-    if barcode_data:
-      name, weight, expiry_date = barcode_data.split(",")
+        # Write data to database
+        cursor.execute("INSERT INTO category (Name, weight, expiration_date) VALUES (?, ?, ?)",
+                       (vegetable_name, weight, expiry_date))
+        conn.commit()
 
-      # Write data to database2
-      database2.write_item(name=name, weight=float(weight), expiry_date=expiry_date)
+        print(f"Detected vegetable: {vegetable_name}. Weight: {weight} kg. Expiry: {expiry_date} (written to database)")
 
-      print(f"Scanned barcode for {food_prefix} food: Name: {name}, Weight: {weight}, Expiry: {expiry_date} (written to database2)")
+    elif item.lower().startswith("pac_"):
+        # Extract packaged food name prefix from the format
+        food_prefix = item[:4]
+
+        # Dummy barcode scan (replace with actual implementation)
+        barcode_data = scan_barcode(dummy=True)
+        # Example dummy barcode data format: "name,weight,expiry"
+        if barcode_data:
+            name, weight, expiry_date = barcode_data.split(",")
+
+            # Write data to database
+            cursor.execute("INSERT INTO category (Name, weight, expiration_date) VALUES (?, ?, ?)",
+                           (name, float(weight), expiry_date))
+            conn.commit()
+
+            print(f"Scanned barcode for {food_prefix} food: Name: {name}, Weight: {weight}, Expiry: {expiry_date} (written to database)")
+        else:
+            print(f"Failed to scan barcode for {food_prefix} food.")
+
     else:
-      print(f"Failed to scan barcode for {food_prefix} food.")
-  else:
-    # Handle undetected items
-    print("Undetected item. Please enter details:")
+        # Handle undetected items
+        print("Undetected item. Please enter details:")
 
-    while True:
-      try:
-        name = input("Enter item name: ")
-        weight = float(input("Enter weight (kg): "))
-        # Validate expiry date format (YYYY-MM-DD)
-        expiry_date = input("Enter expiry date (YYYY-MM-DD): ")
-        datetime.datetime.strptime(expiry_date, "%Y-%m-%d")  # Raise ValueError for invalid format
-        break
-      except ValueError:
-        print("Invalid expiry date format. Please enter YYYY-MM-DD.")
+        while True:
+            try:
+                name = input("Enter item name: ")
+                weight = float(input("Enter weight (kg): "))
+                # Validate expiry date format (YYYY-MM-DD)
+                expiry_date = input("Enter expiry date (YYYY-MM-DD): ")
+                date.fromisoformat(expiry_date)  # Raise ValueError for invalid format
+                break
+            except ValueError:
+                print("Invalid expiry date format. Please enter YYYY-MM-DD.")
 
-    # Write data to database2
-    database2.write_item(name=name, weight=weight, expiry_date=expiry_date)
+        # Write data to database
+        cursor.execute("INSERT INTO category (Name, weight, expiration_date) VALUES (?, ?, ?)",
+                       (name, weight, expiry_date))
+        conn.commit()
 
-    print(f"Added item: {name}, Weight: {weight} kg, Expiry: {expiry_date} (written to database2)")
+        print(f"Added item: {name}, Weight: {weight} kg, Expiry: {expiry_date} (written to database)")
 
 
 def scan_barcode(dummy=True):
-  """
-  Dummy barcode scanning function (replace with actual implementation).
+    """
+    Dummy barcode scanning function (replace with actual implementation).
 
-  Args:
-      dummy (bool, optional): Flag to indicate dummy behavior (default: True).
+    Args:
+        dummy (bool, optional): Flag to indicate dummy behavior (default: True).
 
-  Returns:
-      str: A dummy barcode string in the format "name,weight,expiry" (for demonstration).
-  """
+    Returns:
+        str: A dummy barcode string in the format "name,weight,expiry" (for demonstration).
+    """
 
-  if dummy:
-    return "Product X,1.25,2024-06-20"  # Dummy barcode data with name, weight, expiry
-  else:
-    # Replace with your code to capture frames from a camera and use a barcode library
-    # like pyzbar to decode the barcode. You'll need to extract relevant information
-    # (name, weight, expiry) from the decoded data.
-    pass
-
-import datetime  # For expiry date validation
+    if dummy:
+        return "Product 1.25,2024-06-20"  # Dummy barcode data with name, weight, expiry
+    else:
+        # Replace with your code to capture frames from a camera and use a barcode library
+        # like pyzbar to decode the barcode. You'll need to extract relevant information
+        # (name, weight, expiry) from the decoded data.
+        pass
 
 
-# Replace with your actual database connection/interaction code
-class Database2:
-  def write_item(self, name, weight, expiry_date):
-    # Replace with your specific database write logic
-    # Here's a placeholder implementation for demonstration
-    print(f"Writing to database2: name={name}, weight={weight}, expiry_date={expiry_date}")
-
-
-
-
-# (Optional) Main function (replace with your actual implementation for user interaction)
+# Main function for user interaction
 def main():
-  database2 = Database2()
+    # Connect to the database
+    conn = sqlite3.connect("items.db")  # Replace with your desired database file name
 
-  while True:
-    item = input("Enter item (veg_<name>, pac_<name>, or name for other items): ")
+    # Create the 'category' table if it doesn't exist
+    cursor = conn.cursor()
+    cursor.execute('''CREATE TABLE IF NOT EXISTS category (
+                        Name text PRIMARY KEY,
+                        weight real,
+                        expiration_date date
+                        )''')
+    conn.commit()  # Commit the table creation
 
-    # Function call to process the item
-    process_item(item, database2)
+    # Now you can proceed with using the database in the loop
+    while True:
+        item = input("Enter item (veg_<name>, pac_<name>, or name for other items): ")
 
-    # Ask user if they want to add another item
-    choice = input("Add another item? (y/n): ")
-    if choice.lower() != "y":
-      break
+        # Function call to process the item
+        process_item(item, conn)  # Here's the call to process_item
+
+        # Ask user if they want to add another item
+        choice = input("Add another item? (y/n): ")
+        if choice.lower() != "y":
+            break
+
+    # Remember to close the connection after the loop
+    conn.close()
 
 
 if __name__ == "__main__":
-  main()
+    main()
