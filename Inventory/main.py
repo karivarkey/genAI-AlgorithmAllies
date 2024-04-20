@@ -22,29 +22,13 @@ def process_item(item, conn):
         # Simulate weight sensor reading (replace with actual sensor code)
         weight = round(np.random.uniform(0.1, 1.5), 2)  # Random weight between 0.1 and 1.5 kg
 
-<<<<<<< HEAD
-    print(f"Detected vegetable: {vegetable_name}. Weight: {weight} kg. Expiry: {expiry_date} (written to database2)")
-  elif item.lower().startswith("pack"):
-    # Extract packaged food name prefix from the format
-    #food_prefix = item[:4]
-=======
         # Add 5 days to current date for expiry
         today = date.today()
         expiry_date = (today + timedelta(days=5)).strftime("%Y-%m-%d")
->>>>>>> 7f820e9fb64d5a947c71358ac4305a77f59ef070
 
-        # Write data to database
-        cursor.execute("INSERT INTO category (Name, weight, expiration_date) VALUES (?, ?, ?)",
-                       (vegetable_name, weight, expiry_date))
-        conn.commit()
-
-        print(f"Detected vegetable: {vegetable_name}. Weight: {weight} kg. Expiry: {expiry_date} (written to database)")
-
-    elif item.lower().startswith("pac_"):
-        # Extract packaged food name prefix from the format
-        food_prefix = item[:4]
-
-        # Dummy barcode scan (replace with actual implementation)
+    elif item.lower().startswith("pack"):
+        food_prefix=item[:4]
+                # Dummy barcode scan (replace with actual implementation)
         barcode_data = scan_barcode(dummy=True)
         # Example dummy barcode data format: "name,weight,expiry"
         if barcode_data:
