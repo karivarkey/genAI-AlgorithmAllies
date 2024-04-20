@@ -1,15 +1,12 @@
 from flask import Flask, render_template
 import json
 import sqlite3
-from ai import generate
+from Flask.recipes_ai import generate
+from Flask.vision_ai import classify_object
 import jsonify
-
-# Database connection string (replace with your actual connection details)
-
-
-# Define SQLAlchemy base class (optional, adjust based on your model)
-
-
+import base64
+from flask import request
+import asyncio
 
 
 # Create engine and session maker
@@ -20,6 +17,8 @@ def convert_item(item):
       "ExpiryDate": item[2]
   }
 
+#item added:
+item = 'empty'
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -91,5 +90,63 @@ def inventory():
 
   return render_template('inventory.html', materials=materials)
 
+
+@app.route('/add_items')
+def add():
+    return render_template('add_items/object_detection.html')
+
+"""
+@app.route('/scan')
+def scan():
+    return render_template('scan.html')
+
+@app.route('/entry')
+def entry():
+    return render_template('entry.html')
+"""
+import asyncio
+
+@app.route('/capture-image', methods=['POST'])
+def capture_image():
+  try:
+    data =  request.get_json()
+    image_data = data['imageData']
+    
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(classify_object(image_data))
+    print("this is the item: ", item)
+
+    # Decode image data and save the image
+    #image_bytes = base64.b64decode(image_data.split(',')[1])
+    #with open('captured_image.jpg', 'wb') as f:
+    #  f.write(image_bytes)
+
+    return "Image captured successfully!", 200
+
+  except Exception as e:
+    print(f"Error capturing image: {e}")
+    return "Error capturing image", 500
+    
+"""
+@app.route('/submit-item', methods=['POST'])
+def submit_item():
+    try:
+        data = request.get_json()
+        name = data['name']
+        expiry_date = data['expiryDate']
+        weight = data['weight']
+
+        # Save item details to your database or perform other backend actions
+        # ... (store name, expiry_date, and weight in your database)
+
+        return "Item details submitted successfully!", 200
+
+    except Exception as e:
+        print(f"Error submitting item: {e}")
+        return "Error submitting item", 500
+
 if __name__ == '__main__':
   app.run(debug=True)
+
+  """

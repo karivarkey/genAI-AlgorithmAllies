@@ -1,0 +1,25 @@
+
+#camera-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-radius: 20px 0 0 20px; /* Top left corner rounded */
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+#camera {
+    margin: 50px;
+    width: auto;
+    height: auto;
+    border-radius: 50px;
+}
+
+#scan-message {
+    display: none;
+    font-weight: bold;
+    margin-top: 20px;
+    text-align: center;
+}

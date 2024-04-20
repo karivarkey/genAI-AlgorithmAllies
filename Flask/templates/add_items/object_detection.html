@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Feed and Image Capture</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/add_items.css') }}">
+</head>
+<body>
+    <div id="camera-container">
+        <video id="camera" autoplay muted></video>
+    </div>
+    
+
+    <script>
+        const video = document.getElementById('camera');
+        const scanMessage = document.getElementById('scan-message');
+
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error('Error accessing camera:', err);
+            });
+
+        // Capture image immediately when video is playing
+        video.addEventListener('playing', () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0);
+
+            // Send image data to backend (replace with your actual logic)
+            const imageData = canvas.toDataURL('image/jpeg');
+            // Use fetch or another method to send imageData to backend endpoint
+            fetch('/capture-image', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ imageData }),
+            });
+
+            // Show scan message for a brief period
+            scanMessage.style.display = 'block';
+            setTimeout(() => {
+                scanMessage.style.display = 'none';
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
