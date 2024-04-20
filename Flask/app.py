@@ -2,7 +2,7 @@ from flask import Flask, render_template
 import json
 import sqlite3
 from ai import generate
-import jsonify
+import yaml
 
 # Database connection string (replace with your actual connection details)
 
@@ -66,16 +66,45 @@ async def recipie():
   list = []
   sample_json = get_items()
   x = x + sample_json
-  x = x + "\nWhat are the available dishes I can make. Provide available dishes as a json with dish name and ingredients required alsong with nutritional facts "
+  x = x + """\nWhat are the available dishes I can make. Provide available dishes along with nutritional values in a proper json format Keep the json simple and minimal with 0 comments. Act like an API returning the JSON. DO NOT ADD COMMENTS AND ALL VALUE MUST BE STRINGS. 22g of a nutrient must be shows as '22g'. The details must be , name , ingrideint , nutrition. the nutrition will have 4 sub values of calories , prootiens , carbohydfrates and fats DO NOT USE OTHER NAMES FOR JSON VALUES, Strictly follow this example
+{
+  "availableDishes": [
+    {
+      "name": "Tomato Salad",
+      "ingredients": "tomato",
+      "nutrition": {
+        "calories": "18kcal",
+        "proteins": "0.9g",
+        "carbohydrates": "3.9g",
+        "fats": "0.2g"
+      }
+    },
+    {
+      "name": "Tomato and Lays Snack Mix",
+      "ingredients": "tomato, Lays",
+      "nutrition": {
+        "calories": "Varies based on Lays flavor",
+        "proteins": "Varies based on Lays flavor",
+        "carbohydrates": "Varies based on Lays flavor",
+        "fats": "Varies based on Lays flavor" 
+      }
+    } 
+  ]
+}
+ """
+  is_loading = True
+  print("Showing loader...")
+  data_to_display  = await generate(x)
+  print("Hiding loader...")
+  is_loading = False
+  with open('test.json','r') as f:
+    list = json.load(f)
+  print(list)
+# Print the description with line breaks
+  #return render_template('recipies.html',dishes=list['availableDishes'])
+  return render_template('loading.html', content=f"<h1>'hello'</h1>")
+
   
-  result = await generate(x)
-  if sample_json is None:
-        # Handle the case where no ingredients are found (e.g., return error message)
-        return jsonify({"error": "No ingredients found"})
-  dishes = await generate(x)
-
-
-  return render_template('recipies.html',dishes)
   
 
 

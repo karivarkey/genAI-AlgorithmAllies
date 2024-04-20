@@ -1,0 +1,35 @@
+
+{
+  "availableDishes": [
+    {
+      "name": "Tomato Salad",
+      "ingredients": "tomato",
+      "nutrition": {
+        "calories": "18kcal",
+        "proteins": "0.9g",
+        "carbohydrates": "3.9g",
+        "fats": "0.2g"
+      }
+    },
+    {
+      "name": "Tomato Salsa",
+      "ingredients": "tomato",
+      "nutrition": {
+        "calories": "Varies based on recipe",
+        "proteins": "Varies based on recipe",
+        "carbohydrates": "Varies based on recipe",
+        "fats": "Varies based on recipe"
+      }
+    },
+    {
+      "name": "Tomato and Lays Snack Mix",
+      "ingredients": "tomato, Lays",
+      "nutrition": {
+        "calories": "Varies based on Lays flavor",
+        "proteins": "Varies based on Lays flavor",
+        "carbohydrates": "Varies based on Lays flavor",
+        "fats": "Varies based on Lays flavor"
+      }
+    }
+  ]
+}

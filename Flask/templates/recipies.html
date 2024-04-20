@@ -1,24 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Available Dishes</title>
+    <title>Dishes</title>
+    <link rel="stylesheet" href="./../static/css/output.css" />
+    <script
+      src="https://kit.fontawesome.com/7f7b54ca0a.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
-    <h1>Available Dishes Based on Your Ingredients</h1>
-    <ul>
+    <div id="loader" style="display: none">Loading dishes...</div>
+    {% if is_loading %}
+    <script>
+      document.getElementById("loader").style.display = "block";
+    </script>
+    {% endif %}
+    <header
+      class="font-poppins text-3xl text-white bg-blue-600 text-center p-2 flex items-center"
+    >
+      <a href="./">
+        <i class="fa-solid fa-house-chimney"></i>
+      </a>
+      <h class="text-center flex-grow">AVAILABLE RECIPIES</h>
+    </header>
+    <div calss="inventory-list flex flex-row flex-wrap justify-start mt-6">
       {% for dish in dishes %}
-      <li>
-        <h2>{{ dish.name }}</h2>
-        <p><b>Ingredients:</b></p>
-        <ul>
-          {% for ingredient in dish.ingredients %}
-          <li>{{ ingredient }}</li>
-          {% endfor %}
-        </ul>
-      </li>
+      <div
+        class="card bg-white rounded-md shadow-md p-4 mb-4 w-1/3 hover:scale-105"
+      >
+        NAME : {{ dish.name }} <br />
+        CALORIES : {{ dish.nutrition.calories }} <br />
+        CARBS : {{ dish.nutrition.carbohydrates }}<br />
+        PROTIEN : {{ dish.nutrition.proteins }} <br />
+        FAT : {{ dish.nutrition.fats }}<br />
+      </div>
       {% endfor %}
-    </ul>
+    </div>
   </body>
 </html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Loading...</title>
+    <style>
+      #loader {
+        position: fixed; /* Keep the loader centered */
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        /* Customize loader appearance (optional) */
+        width: 100px;
+        height: 100px;
+        border: 10px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 10px solid #3498db; /* Rotating animation */
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loader"></div>
+    <script>
+      const loader = document.getElementById("loader");
+
+      function showLoader() {
+        loader.style.display = "block";
+      }
+
+      function hideLoader() {
+        loader.style.display = "none";
+      }
+    </script>
+    {{ content }}
+  </body>
+</html>
