@@ -1,7 +1,7 @@
 import React from "react";
 import InventoryList from "./InventoryList";
 import { Header } from "./Header";
-import GetFood from "./GetFood";
+import { GetFood } from "./GetFood";
 const demoData = {
   contents: [
     "Apples",
