@@ -1,4 +1,4 @@
-# import cv2  # Optional, for future barcode scanning implementation (if needed)
+import cv2  # Optional, for future barcode scanning implementation (if needed)
 import numpy as np
 import sqlite3  # For database interaction
 from datetime import date, timedelta  # For expiry date handling
